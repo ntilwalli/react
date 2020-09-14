@@ -10,6 +10,7 @@ import {incorporate} from './incorporate';
 
 export type PropsExtensions = {
   sel?: string | symbol;
+  domProps?: any
 };
 
 type PropsLike<P> = P & PropsExtensions & Attributes;
