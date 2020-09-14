@@ -1,4 +1,4 @@
-import {createElement, forwardRef} from 'react';
+import {createElement, forwardRef, createRef} from 'react';
 import {Scope} from './scope';
 import {ScopeContext} from './context';
 import Incorporator from './Incorporator';
@@ -10,13 +10,18 @@ export function incorporate(type: any) {
     wrapperComponents.set(
       type,
       forwardRef<any, any>((props, ref) =>
-        createElement(ScopeContext.Consumer, null, (scope: Scope) =>
-          createElement(Incorporator, {
-            targetProps: props,
-            targetRef: ref,
-            target: type,
-            scope: scope,
-          }),
+        createElement(ScopeContext.Consumer, null, (scope: Scope) => {
+            let targetRef = ref
+            if (!ref && props.domProps) {
+              targetRef = createRef()
+            }
+            return createElement(Incorporator, {
+              targetProps: props,
+              targetRef,
+              target: type,
+              scope: scope,
+            })
+          }
         ),
       ),
     );

@@ -13,6 +13,9 @@ function main(sources) {
   const reset$ = sources.react
     .select(btnSel)
     .events('click')
+    .debug((ev) => {
+      return ev.target.printer()
+    })
     .mapTo(() => 0);
 
   const count$ = xs

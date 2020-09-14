@@ -28,6 +28,17 @@ export default class Incorporator extends PureComponent<Props, State> {
     });
   }
 
+  public componentDidUpdate(prevProps, prevState) {
+    const x = this
+    const {domProps} = this.props.targetProps
+    if (domProps && this.props.targetRef) {
+      Object.entries(domProps)
+        .forEach(([key, val]) => { 
+          this.props.targetRef.current[key] = val 
+        })
+    }
+  }
+
   private incorporateHandlers<P>(props: P, scope: Scope): P {
     const handlers = scope.getSelectorHandlers(this.selector);
     for (const evType of Object.keys(handlers)) {
@@ -45,6 +56,7 @@ export default class Incorporator extends PureComponent<Props, State> {
       output.ref = targetRef;
     }
     delete output.sel;
+    delete output.domProps
     return output;
   }
 
