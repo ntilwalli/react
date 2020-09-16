@@ -1,4 +1,8 @@
 {
   "baseUrl": "http://localhost:1234",
-  "video": false
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 10000,
+  "modifyObstructiveCode": false,
+  "video": false,
+  "fixturesFolder": false
 }

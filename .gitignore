@@ -4,6 +4,9 @@
 /lib
 /dist
 /.cache
+fixtures
+support
+plugins
 node_modules
 package-lock.json
 pnpm-lock.yaml

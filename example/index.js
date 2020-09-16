@@ -1,7 +1,7 @@
 import xs from 'xstream';
 import {createElement} from 'react';
 import {render} from 'react-dom';
-import {h, makeComponent} from '../src/index';
+import {h2, makeComponent} from '../src/index';
 
 function main(sources) {
   const init$ = xs.of(() => 0);
@@ -20,9 +20,9 @@ function main(sources) {
     .fold((state, fn) => fn(state));
 
   const vdom$ = count$.map(i =>
-    h('div', [
-      h('h1', `Hello ${i} times`),
-      h('button', {sel: btnSel}, 'Reset'),
+    h2('div', [
+      h2('h1', `Hello ${i} times`),
+      h2('button', {sel: btnSel, className: 'clicker', domProps: {foo: 3}}, 'Reset'),
     ]),
   );
 

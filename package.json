@@ -49,8 +49,11 @@
     "compile": "npm run compile-cjs && npm run compile-es6",
     "compile-cjs": "tsc --module commonjs --outDir ./lib/cjs",
     "compile-es6": "echo 'TODO' : tsc --module es6 --outDir ./lib/es6",
-    "test": "$(npm bin)/mocha test/*.ts --require ts-node/register --recursive; cypress run",
+    "test": "$(npm bin)/mocha test/*.ts --require ts-node/register --recursive",
+    "full-test": "npm test; npm run cypress:run",
     "start": "parcel example/index.html",
-    "serve-test": "start-server-and-test start http://localhost:1234 test"
+    "serve-test": "start-server-and-test start http://localhost:1234 full-test",
+    "cypress:open": "cypress open",
+    "cypress:run":  "cypress run"
   }
 }
