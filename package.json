@@ -29,10 +29,13 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.5.2",
     "@types/react": "16.9.3",
+    "cypress": "^5.2.0",
     "mocha": "^6.2.0",
+    "parcel": "^1.12.3",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-test-renderer": "16.9.0",
+    "start-server-and-test": "^1.11.3",
     "symbol-observable": "^1.2.0",
     "ts-node": "^7.0.0",
     "typescript": "3.6.3",
@@ -46,6 +49,11 @@
     "compile": "npm run compile-cjs && npm run compile-es6",
     "compile-cjs": "tsc --module commonjs --outDir ./lib/cjs",
     "compile-es6": "echo 'TODO' : tsc --module es6 --outDir ./lib/es6",
-    "test": "$(npm bin)/mocha test/*.ts --require ts-node/register --recursive"
+    "full-test": "npm test; npm run cypress:run",
+    "test": "$(npm bin)/mocha test/*.ts --require ts-node/register --recursive",
+    "serve-test": "start-server-and-test start http://localhost:1234 full-test",
+    "start": "parcel example/index.html",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   }
 }

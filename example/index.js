@@ -1,6 +1,7 @@
 import xs from 'xstream';
 import {createElement} from 'react';
 import {render} from 'react-dom';
+import {setModules} from '../src/Incorporator'
 import {h, makeComponent} from '../src/index';
 
 function main(sources) {
@@ -22,7 +23,12 @@ function main(sources) {
   const vdom$ = count$.map(i =>
     h('div', [
       h('h1', `Hello ${i} times`),
-      h('button', {sel: btnSel}, 'Reset'),
+      h('button', {
+        sel: btnSel, 
+        className: 'clicker', 
+        domProps: {foo: 3}, 
+        domClass: {hello: true, goodbye: false}
+      }, 'Reset'),
     ]),
   );
 
@@ -32,5 +38,22 @@ function main(sources) {
 }
 
 const App = makeComponent(main);
+
+setModules({
+  domProps: {
+    componentDidUpdate: (element, props) => {
+      Object.entries(props).forEach(([key, val]) => {
+        element[key] = val;
+      });
+    }
+  },
+  domClass: {
+    componentDidUpdate: (element, props) => {
+      Object.entries(props).forEach(([key, val]) => {
+        val ? element.classList.add(key) : element.classList.remove(key);
+      });
+    }
+  }
+})
 
 render(createElement(App), document.getElementById('app'));
