@@ -22,7 +22,7 @@ function main(sources) {
   const vdom$ = count$.map(i =>
     h2('div', [
       h2('h1', `Hello ${i} times`),
-      h2('button', {sel: btnSel, className: 'clicker', domProps: {foo: 3}}, 'Reset'),
+      h2('button', {sel: btnSel, className: 'clicker', domProps: {foo: 3}, domClass: {hello: true, goodbye: false}}, 'Reset'),
     ]),
   );
 

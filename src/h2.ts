@@ -15,11 +15,42 @@ import {incorporate} from './incorporate';
 export type PropsExtensions = {
   sel?: string | symbol;
   domProps?: any
+  domHook?: any
+  domClass?: any
 };
 
 type PropsLike<P> = P & PropsExtensions & Attributes;
 
 type Children = string | Array<ReactNode>;
+
+export function domClassify(Comp: any): ComponentType<any> {
+  class DomProps extends Component<any, any> {
+    private ref: any;
+    private additionalClassname: string;
+    constructor(props) {
+      super(props);
+      this.additionalClassname = this.props.domClass 
+        ? (' ' + Object.entries(this.props.domClass).filter(x => x[1]).map(x => x[0]).join(' '))
+        : ''
+      this.ref = props.forwardedRef || createRef();
+    }
+
+    render() {
+      const p: any = {
+        ref: this.ref, 
+        ...this.props, 
+        className: (this.props.className || '') + this.additionalClassname
+      }
+      delete p.forwardedRef
+      delete p.domClass;
+      return createElement(Comp, p);
+    }
+  }
+
+  return forwardRef((props, ref) => {
+    return createElement(DomProps, {...props, forwardedRef: ref});
+  });
+}
 
 export function domPropify(Comp: any): ComponentType<any> {
   class DomProps extends Component<any, any> {
@@ -55,28 +86,28 @@ export function domPropify(Comp: any): ComponentType<any> {
 export function domHookify(Comp: any): ComponentType<any> {
   class DomHooks extends Component<any, any> {
     private ref: any;
-    private hooks: any;
+    private hook: any;
     constructor(props) {
       super(props);
-      this.hooks = this.props.domHooks;
+      this.hook = this.props.domHook;
       this.ref = props.forwardedRef || createRef();
     }
 
     public componentDidMount() {
-      if (this.hooks && this.hooks.insert && this.ref) {
-        this.hooks.insert({elm: this.ref.current})
+      if (this.hook && this.hook.insert && this.ref) {
+        this.hook.insert({elm: this.ref.current})
       }
     }
 
     public componentDidUpdate() {
-      if (this.hooks && this.hooks.update && this.ref) {
-        this.hooks.update({elm: this.ref.current})
+      if (this.hook && this.hook.update && this.ref) {
+        this.hook.update({elm: this.ref.current})
       }
     }
 
     public componentWillUnmount() {
-      if (this.hooks && this.hooks.destroy && this.ref) {
-        this.hooks.destroy({elm: this.ref.current})
+      if (this.hook && this.hook.destroy && this.ref) {
+        this.hook.destroy({elm: this.ref.current})
       }
     }
 
@@ -109,10 +140,10 @@ function hyperscriptProps<P = any>(
   type: ElementType<P> | keyof ReactHTML,
   props: PropsLike<P>,
 ): ReactElement<P> {
-  if (!props.sel) {
+  if (!props.sel && !props.domClass && !props.domHook) {
     return createElement(type, props);
   } else {
-    return createElement(domHookify(domPropify(incorporate(type))), props);
+    return createElement(domHookify(domPropify(domClassify(incorporate(type)))), props);
   }
 }
 
@@ -128,10 +159,10 @@ function hyperscriptPropsChildren<P = any>(
   props: PropsLike<P>,
   children: Children,
 ): ReactElement<P> {
-  if (!props.sel) {
+  if (!props.sel && !props.domClass && !props.domHook) {
     return createElementSpreading(type, props, children);
   } else {
-    return createElementSpreading(domHookify(domPropify(incorporate(type))), props, children);
+    return createElementSpreading(domHookify(domPropify(domClassify(incorporate(type)))), props, children);
   }
 }
 

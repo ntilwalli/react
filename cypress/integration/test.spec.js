@@ -21,5 +21,11 @@ context('Page load', () => {
           cy.wrap($el[0].foo).should('eq', 3)
         })
     })
+    it('Should allow toggling className items based on domClass prop', () => {
+      cy.get('.clicker')
+        .then(($el) => {
+          cy.wrap($el[0].className).should('eq', 'clicker hello')
+        })
+    })
   })
 })
