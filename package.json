@@ -1,6 +1,6 @@
 {
-  "name": "@cycle/react",
-  "version": "2.9.0",
+  "name": "stump-react",
+  "version": "2.18.0",
   "description": "Utilities to interoperate between Cycle.js and React",
   "author": "Andre Staltz <contact@staltz.com>",
   "license": "MIT",
